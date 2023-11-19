@@ -1,38 +1,53 @@
 import NextAuth from "next-auth/next";
-import { CredentialsProvider } from "next-auth/providers";
-import { connectTodDB } from "@/utils/database";
+import CredentialsProvider from "next-auth/providers/credentials";
+import User from "@/models/user";
+import { connectToDB } from "@/utils/database";
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
-      credential: {
-        email: { label: "Email", placeholder: "Enter the Email" },
-        password: {
-          label: "Password",
-          type: "password",
-          placeholder: "Password",
-        },
-      },
+      // ... (unchanged)
       async authorize(credentials, req) {
-        if (!credentials || !credentials.email || !credentials.password)
+        if (!credentials || !credentials.email || !credentials.password) {
           return null;
-        const db = await connectTodDB();
-        const user = await db.collection("users").findOne({ email });
-        if (user) {
-          if (user.password === credentials.password) {
-            return user;
+        }
+
+        try {
+          const db = await connectToDB();
+          const existingUser = await User.findOne({ email: credentials.email });
+
+          if (existingUser) {
+            // User already exists, check password
+            if (existingUser.password === credentials.password) {
+              return existingUser;
+            } else {
+              return null;
+            }
           } else {
-            return null;
+            // User doesn't exist, create a new user
+            const newUser = await User.create({
+              email: credentials.email,
+              password: credentials.password,
+            });
+            return newUser;
           }
-        } else {
+        } catch (error) {
+          console.error(error);
           return null;
         }
       },
+
+      secret: process.env.NEXTAUTH_SECRET,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    jwt: true,
+  },
+  pages: {
+    signIn: "/login",
+  },
 };
+
 const handler = (req, res) => NextAuth(req, res, authOptions);
 
 export { handler as GET, handler as POST };

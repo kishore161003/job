@@ -1,17 +1,14 @@
-import mongoose, { mongo } from "mongoose";
-let isConnected = false;
+import mongoose from "mongoose";
 
-export const connectTodDB = async () => {
+export const connectToDB = async () => {
   mongoose.set("strictQuery", true);
-  if (isConnected) {
-    console.log("mongodb connected succesfully");
-    return;
-  }
   try {
-    mongoose.connect(process.env.MONGODB_URL);
-    isConnected = true;
-    console.log("mongodb connected succesfully");
-  } catch (e) {
+    const connection = await mongoose.connect(process.env.MONGODB_URI, {
+      dbName: "JobNestle",
+    });
+    console.log("Database connected");
+    return connection;
+  } catch (error) {
     console.log(error);
   }
 };

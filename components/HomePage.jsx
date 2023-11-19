@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import HomeCard from "../components/HomeCard";
 import { useSession } from "next-auth/react";
@@ -7,6 +7,7 @@ const HomePage = () => {
   const data = useSession();
   return (
     <section className="lg:mx-32">
+
       <div className="flex items-center justify-between max-md:flex-wrap-reverse">
         <div>
           <div className="mx-auto text-center">

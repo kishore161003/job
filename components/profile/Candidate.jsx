@@ -52,14 +52,16 @@ const Candidate = ({ data }) => {
   const handleSaveChanges = async (e) => {
     e.preventDefault();
     var imgUrl = "/defaultuser.png";
-    if (!image) return;
+    if (image) {
+      imgUrl = await startUpload(Array.from(image));
+      if (imgUrl && imgUrl[0].url) {
+        setUserData((prevData) => ({ ...prevData, image: imgUrl[0].url }));
+      }
 
-    imgUrl = await startUpload(Array.from(image));
-    if (imgUrl && imgUrl[0].url) {
-      setUserData((prevData) => ({ ...prevData, image: imgUrl[0].url }));
+      postChanges(imgUrl[0].url);
+    } else {
+      postChanges(imgUrl);
     }
-
-    postChanges(imgUrl[0].url);
 
     setIsEditMode(false);
   };

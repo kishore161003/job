@@ -35,15 +35,16 @@ export const Employee = ({ data }) => {
   const handleSaveChanges = async (e) => {
     e.preventDefault();
     var imgUrl = "/defaultuser.png";
-    if (!image) return;
-
-    imgUrl = await startUpload(Array.from(image));
-    if (imgUrl && imgUrl[0].url) {
-      setCompanyData((prevData) => ({ ...prevData, image: imgUrl }));
+    if (image) {
+      imgUrl = await startUpload(Array.from(image));
+      if (imgUrl && imgUrl[0].url) {
+        setCompanyData((prevData) => ({ ...prevData, image: imgUrl }));
+      }
+      // console.log("imgUrl", imgUrl[0].url);
+      postChanges(imgUrl[0].url);
+    } else {
+      postChanges(imgUrl);
     }
-    // console.log("imgUrl", imgUrl[0].url);
-    postChanges(imgUrl[0].url);
-
     setIsEditMode(false);
   };
 

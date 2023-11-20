@@ -1,37 +1,61 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const NavBar = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const [employee, setEmployee] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
   };
 
+  useEffect(() => {
+    if (session) {
+      fetch(`/api/profile/${session.user.email}`)
+        .then((res) => res.json())
+        .then((datam) => {
+          if (datam[0] && datam[0].catagory === "Employee") {
+            setEmployee(true);
+          }
+        });
+    }
+  }, [session]);
+
   return (
-    <section className="px-4 lg:px-7 py-5 lg:mx-32 border-b-2 border-blue-950 mb-4 relative">
+    <section className="px-4 lg:px-7 py-5 lg:mx-32 border-b-2 border-blue-950 mb-1 relative">
       <div className="flex flex-row justify-between items-center">
-        <div className="flex items-center">
-          <img
-            src="JobNestle.png"
-            alt="logo"
-            className="h-12 cursor-pointer"
-            onClick={() => router.push("/")}
-          />
+        <div className="flex items-center" onClick={() => router.push("/")}>
+          <img src="JobNestle.png" alt="logo" className="h-12 cursor-pointer" />
           <span className="ml-2 flex items-end font-bold text-[30px]">
             Job
             <span className="text-[30px] text-primary font-bold">Nestle</span>
           </span>
         </div>
+
         <div className="lg:flex hidden flex-row gap-10 align-bottom">
+          <div
+            className="text-primary font-semibold text-[20px] hover:cursor-pointer flex items-center"
+            onClick={() => router.push("/")}
+          >
+            Home
+          </div>
+          <div
+            className={`text-primary font-semibold text-[20px] hover:cursor-pointer flex items-center ${
+              session && session.user && employee ? "visible" : "hidden"
+            }`}
+            onClick={() => router.push("/post")}
+          >
+            Post
+          </div>
           <div className="flex items-center text-primary font-semibold text-[20px]">
             Jobs
           </div>
+
           <div
             className={`flex items-center text-primary font-semibold hover:cursor-pointer text-[20px] ${
               session && session.user ? "visible" : "hidden"
@@ -73,11 +97,28 @@ const NavBar = () => {
       {isMenuOpen && (
         <div className="lg:hidden absolute top-0 p-2 rounded-md right-0 bg-white bg-opacity-95 mt-16 mr-4 z-50">
           {/* Add your mobile menu options here */}
+          <div
+            className="text-primary font-semibold text-[20px] hover:cursor-pointer mb-2"
+            onClick={() => router.push("/")}
+          >
+            Home
+          </div>
+          <div
+            className={`text-primary font-semibold text-[20px] hover:cursor-pointer mb-2 ${
+              session && session.user && employee ? "visible" : "hidden"
+            }`}
+            onClick={() => router.push("/post")}
+          >
+            Post
+          </div>
           <div className="text-primary font-semibold text-[20px] mb-2">
             Jobs
           </div>
+
           <div
-            className="text-primary font-semibold text-[20px] hover:cursor-pointer mb-2"
+            className={`text-primary font-semibold text-[20px] hover:cursor-pointer mb-2 ${
+              session && session.user ? "visible" : "hidden"
+            }`}
             onClick={() => router.push("/profile")}
           >
             Profile

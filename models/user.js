@@ -17,12 +17,6 @@ const UserSchema = new Schema({
     type: String,
     default: "/defaultuser.png",
   },
-  candidateUserName: {
-    type: String,
-  },
-  type: {
-    type: String,
-  },
   skills: {
     type: Array,
   },
@@ -35,10 +29,11 @@ const UserSchema = new Schema({
   education: {
     type: String,
   },
-  catagory: {
+  profession: {
     type: String,
   },
-  profession: {
+  catagory: {
+    default: "",
     type: String,
   },
   applied: {
@@ -50,20 +45,11 @@ const UserSchema = new Schema({
   companyName: {
     type: String,
   },
-  companyUserName: {
-    type: String,
-  },
   about: {
     type: String,
   },
   webSite: {
     type: String,
-  },
-  startDate: {
-    type: Date,
-  },
-  hired: {
-    type: Number,
   },
 });
 

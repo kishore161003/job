@@ -1,28 +1,54 @@
 import React, { useState } from "react";
+import { useUploadThing } from "@/lib/uploadthing";
+import { useSession } from "next-auth/react";
 
-export const Employee = () => {
-  const initialCompanyData = {
-    image: "",
-    companyName: "ABC Corp",
-    contact: "123-456-7890",
-    address: "456 Business St, City",
-    about: "We are a tech company.",
-    website: "https://www.abccorp.com",
-  };
-  const [companyData, setCompanyData] = useState({ ...initialCompanyData });
+export const Employee = ({ data }) => {
+  const [tempData, setTempData] = useState(data);
+  const [companyData, setCompanyData] = useState(data);
   const [isEditMode, setIsEditMode] = useState(false);
+  const { startUpload } = useUploadThing("media");
+  const { data: session } = useSession();
+  const [image, setImage] = useState(null);
 
   const handleEdit = () => {
     setIsEditMode(true);
   };
 
-  const handleSaveChanges = () => {
-    console.log("Changes saved:", companyData);
+  const postChanges = async (datam) => {
+    const response = await fetch(
+      `/api/profile/employee/${session.user.email}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([companyData, datam]),
+      }
+    );
+    if (response.ok) {
+      console.log("Changes saved:", response.json());
+    } else {
+      console.log("Error saving changes", response.json());
+    }
+  };
+
+  const handleSaveChanges = async (e) => {
+    e.preventDefault();
+    var imgUrl = "/defaultuser.png";
+    if (!image) return;
+
+    imgUrl = await startUpload(Array.from(image));
+    if (imgUrl && imgUrl[0].url) {
+      setCompanyData((prevData) => ({ ...prevData, image: imgUrl }));
+    }
+    // console.log("imgUrl", imgUrl[0].url);
+    postChanges(imgUrl[0].url);
+
     setIsEditMode(false);
   };
 
   const handleCancel = () => {
-    setCompanyData({ ...initialCompanyData });
+    setCompanyData({ ...tempData });
     setIsEditMode(false);
   };
 
@@ -44,12 +70,13 @@ export const Employee = () => {
             type="file"
             accept="image/*"
             className="w-1/2 p-2 border rounded-md"
-            onChange={(e) =>
+            onChange={(e) => {
               setCompanyData((prevData) => ({
                 ...prevData,
                 image: URL.createObjectURL(e.target.files[0]),
-              }))
-            }
+              }));
+              setImage(e.target.files);
+            }}
             disabled={!isEditMode}
           />
         </div>

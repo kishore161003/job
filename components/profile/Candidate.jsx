@@ -1,20 +1,17 @@
+"use client";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
+import { useUploadThing } from "@/lib/uploadthing";
+import { Input } from "../ui/input";
 
-const Candidate = () => {
-  //   const { data: session, status } = useSession();
-  const initialUserData = {
-    userName: "JohnDoe",
-    contact: "123-456-7890",
-    address: "123 Main St, City",
-    education: "Bachelor's in Computer Science",
-    profession: "Software Developer",
-    skills: ["JavaScript", "React"],
-    profileImage: "", // New field for profile image
-  };
-  const [userData, setUserData] = useState({ ...initialUserData });
+const Candidate = ({ data }) => {
+  const [tempData, setTempData] = useState(data);
+  const [userData, setUserData] = useState(data);
   const [skill, setSkill] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
+  const { data: session } = useSession();
+  const { startUpload } = useUploadThing("media");
+  const [image, setImage] = useState(null);
 
   const addSkill = () => {
     if (skill.trim() === "") return;
@@ -34,41 +31,68 @@ const Candidate = () => {
     setIsEditMode(true);
   };
 
-  const handleSaveChanges = () => {
-    console.log("Changes saved:", userData);
+  const postChanges = async (datam) => {
+    const response = await fetch(
+      `/api/profile/candidate/${session.user.email}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([userData, datam]),
+      }
+    );
+    if (response.ok) {
+      console.log("Changes saved:", response.json());
+    } else {
+      console.log("Error saving changes", response.json());
+    }
+  };
+
+  const handleSaveChanges = async (e) => {
+    e.preventDefault();
+    var imgUrl = "/defaultuser.png";
+    if (!image) return;
+
+    imgUrl = await startUpload(Array.from(image));
+    if (imgUrl && imgUrl[0].url) {
+      setUserData((prevData) => ({ ...prevData, image: imgUrl[0].url }));
+    }
+
+    postChanges(imgUrl[0].url);
+
     setIsEditMode(false);
   };
 
   const handleCancel = () => {
-    setUserData({ ...initialUserData });
+    setUserData({ ...tempData });
     setIsEditMode(false);
   };
 
   return (
     <div className="mt-4">
       <form className="relative">
-        {/* New field for profile image */}
         <label className="block text-sm font-semibold mb-2">
           Profile Image :
         </label>
         <div className="flex items-center gap-4 mb-4">
-          {userData.profileImage && (
+          {userData.image && (
             <img
-              src={userData.profileImage}
+              src={userData.image}
               alt="Profile"
               className="w-[100px] h-[100px] ml-4 border rounded-full"
             />
           )}
-          <input
+          <Input
             type="file"
-            accept="image/*"
-            className="w-1/2 p-2 border rounded-md"
-            onChange={(e) =>
+            className="border-dotted file:bg-transparent file:border-hidden hover:file:border-dashed hover:file:border-gray-400 hover:file:rounded-md mt-4 w-full md:w-1/2"
+            onChange={(e) => {
               setUserData((prevData) => ({
                 ...prevData,
-                profileImage: URL.createObjectURL(e.target.files[0]),
-              }))
-            }
+                image: URL.createObjectURL(e.target.files[0]),
+              }));
+              setImage(e.target.files);
+            }}
             disabled={!isEditMode}
           />
         </div>
@@ -77,11 +101,11 @@ const Candidate = () => {
         <input
           placeholder="Enter your username"
           className="w-full p-2 border rounded-md mb-4"
-          value={userData.userName}
+          value={userData.name}
           onChange={(e) =>
             setUserData((prevData) => ({
               ...prevData,
-              userName: e.target.value,
+              name: e.target.value,
             }))
           }
           disabled={!isEditMode}
@@ -165,35 +189,36 @@ const Candidate = () => {
             </button>
           </div>
           <div className="flex flex-wrap">
-            {userData.skills.map((skill, index) => (
-              <div
-                className=" border-2 border-slate-400  px-2 py-1 rounded-lg m-1 flex justify-center gap-1 items-center"
-                key={index}
-              >
-                <span className="text-slate-400">{skill}</span>
-                {isEditMode && (
-                  <div
-                    onClick={() => removeSkill(skill)}
-                    className="cursor-pointer"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="slategray"
-                      className="w-4 h-4"
+            {userData.skills &&
+              userData.skills.map((skill, index) => (
+                <div
+                  className=" border-2 border-slate-400  px-2 py-1 rounded-lg m-1 flex justify-center gap-1 items-center"
+                  key={index}
+                >
+                  <span className="text-slate-400">{skill}</span>
+                  {isEditMode && (
+                    <div
+                      onClick={() => removeSkill(skill)}
+                      className="cursor-pointer"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-            ))}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="slategray"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              ))}
           </div>
         </div>
 

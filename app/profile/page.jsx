@@ -3,13 +3,24 @@ import { useState } from "react";
 import SingleBanner from "@/components/SingleBanner";
 import { Separator } from "@/components/ui/separator";
 import Dashboard from "@/components/Dashboard";
+import { useSession } from "next-auth/react";
 import Account from "@/components/Account";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 // ...
 
 const Page = () => {
   const [account, setAccount] = useState(true);
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/");
+    }
+  }, [session]);
 
   return (
     <section className="lg:mx-32 flex flex-col">
@@ -58,7 +69,7 @@ const Page = () => {
               </div>
             ) : (
               <div>
-                <Dashboard />
+                <Dashboard  />
               </div>
             )}
           </ScrollArea>

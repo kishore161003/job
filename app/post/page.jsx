@@ -1,11 +1,19 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import JobForm from "@/components/Job/JobForm";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-const page = () => {
+const Page = () => {
   const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/");
+    }
+  }, [session]);
 
   return (
     <div className="lg:mx-32">
@@ -30,4 +38,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

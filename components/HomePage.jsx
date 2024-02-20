@@ -33,7 +33,7 @@ const HomePage = () => {
       <div className="flex flex-col">
         <Card
           className={`flex flex-col justify-center text-white h-8 mt-2 bg-red-500 items-center ${
-            catagoryNotSet ? "visible" : "hidden"
+            session && catagoryNotSet ? "visible" : "hidden"
           }`}
         >
           <CardHeader className="text-lg font-semibold ">
@@ -53,8 +53,8 @@ const HomePage = () => {
                 Careers Find Their <span className="text-green-500">Nest</span>.
               </p>
               <blockquote className="text-2xl italic text-gray-600 mb-8">
-                "Your <span className="text-blue-500">Dream Job</span> Awaits.
-                Let's Make it Happen Together."
+                Your <span className="text-blue-500">Dream Job</span> Awaits.
+                Lets Make it Happen .
               </blockquote>
               <a
                 href="#job-listings"

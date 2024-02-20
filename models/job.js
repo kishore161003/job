@@ -37,6 +37,9 @@ const JobSchema = new Schema({
     type: Number,
     required: [true, "Openings is required!"],
   },
+  applicants: {
+    type: Array,
+  },
 });
 
 const Job = models.Job || model("Job", JobSchema);

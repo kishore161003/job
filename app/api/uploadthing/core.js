@@ -3,7 +3,10 @@ const { createUploadthing } = require("uploadthing/next");
 const f = createUploadthing();
 
 export const ourFileRouter = {
-  media: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
+  media: f({
+    image: { maxFileSize: "4MB", maxFileCount: 1 },
+    pdf: { maxFileSize: "4MB", maxFileCount: 1 },
+  })
     .middleware(async ({ req }) => {
       console.log("middleware", req.body);
       return { userId: 1 };

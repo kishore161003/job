@@ -9,6 +9,7 @@ export const Employee = ({ data }) => {
   const { startUpload } = useUploadThing("media");
   const { data: session } = useSession();
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleEdit = () => {
     setIsEditMode(true);
@@ -34,6 +35,7 @@ export const Employee = ({ data }) => {
 
   const handleSaveChanges = async (e) => {
     e.preventDefault();
+    setLoading(true);
     var imgUrl = "/defaultuser.png";
     if (image) {
       imgUrl = await startUpload(Array.from(image));
@@ -45,6 +47,7 @@ export const Employee = ({ data }) => {
     } else {
       postChanges(imgUrl);
     }
+    setLoading(false);
     setIsEditMode(false);
   };
 
@@ -171,7 +174,7 @@ export const Employee = ({ data }) => {
               className="bg-primary text-white px-4 py-2 rounded-lg mr-2"
               onClick={handleSaveChanges}
             >
-              Save Changes
+              {loading ? "Saving..." : "Save Changes"}
             </button>
 
             <button

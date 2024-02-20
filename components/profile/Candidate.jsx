@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useUploadThing } from "@/lib/uploadthing";
 import { Input } from "../ui/input";
+import { set } from "mongoose";
 
 const Candidate = ({ data }) => {
   const [tempData, setTempData] = useState(data);
@@ -12,6 +13,7 @@ const Candidate = ({ data }) => {
   const { data: session } = useSession();
   const { startUpload } = useUploadThing("media");
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const addSkill = () => {
     if (skill.trim() === "") return;
@@ -51,6 +53,8 @@ const Candidate = ({ data }) => {
 
   const handleSaveChanges = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     var imgUrl = "/defaultuser.png";
     if (image) {
       imgUrl = await startUpload(Array.from(image));
@@ -62,7 +66,7 @@ const Candidate = ({ data }) => {
     } else {
       postChanges(imgUrl);
     }
-
+    setLoading(false);
     setIsEditMode(false);
   };
 
@@ -242,7 +246,7 @@ const Candidate = ({ data }) => {
               className="bg-primary text-white px-4 py-2 rounded-lg mr-2"
               onClick={handleSaveChanges}
             >
-              Save Changes
+              {loading ? "Saving..." : "Save Changes"}
             </button>
             <button
               type="button"

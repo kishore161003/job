@@ -1,13 +1,14 @@
 import { connectToDB } from "@/utils/database";
-import User from "@/models/user";
+import Apply from "@/models/apply";
 
 export const GET = async (req, { params }) => {
   try {
     await connectToDB();
-    const data = await User.find({ email: params.id });
-    console.log(data);
-    return new Response(JSON.stringify(data), { status: 200 });
+    const jobId = params.id;
+    const applies = await Apply.find({ jobId: jobId });
+    return new Response(JSON.stringify(applies), { status: 200 });
   } catch (err) {
+    console.log(err);
     return new Response(JSON.stringify(err), { status: 500 });
   }
 };

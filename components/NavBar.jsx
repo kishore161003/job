@@ -27,10 +27,14 @@ const NavBar = () => {
   }, [session]);
 
   return (
-    <section className="px-4 lg:px-7 py-5 lg:mx-32 border-b-2 border-blue-950 mb-1 relative">
+    <section className="px-4 lg:px-7 py-5 lg:mx-32 border-b-2 border-blue-950 mb-2 relative">
       <div className="flex flex-row justify-between items-center">
         <div className="flex items-center" onClick={() => router.push("/")}>
-          <img src="JobNestle.png" alt="logo" className="h-12 cursor-pointer" />
+          <img
+            src="/JobNestle.png"
+            alt="logo"
+            className="h-12 cursor-pointer"
+          />
           <span className="ml-2 flex items-end font-bold text-[30px]">
             Job
             <span className="text-[30px] text-primary font-bold">Nestle</span>
@@ -52,7 +56,10 @@ const NavBar = () => {
           >
             Post
           </div>
-          <div className="flex items-center text-primary font-semibold text-[20px]">
+          <div
+            className="flex items-center text-primary font-semibold hover:cursor-pointer text-[20px]"
+            onClick={() => router.push("/job")}
+          >
             Jobs
           </div>
 
@@ -99,7 +106,10 @@ const NavBar = () => {
           {/* Add your mobile menu options here */}
           <div
             className="text-primary font-semibold text-[20px] hover:cursor-pointer mb-2"
-            onClick={() => router.push("/")}
+            onClick={() => {
+              router.push("/");
+              setMenuOpen(false);
+            }}
           >
             Home
           </div>
@@ -107,11 +117,20 @@ const NavBar = () => {
             className={`text-primary font-semibold text-[20px] hover:cursor-pointer mb-2 ${
               session && session.user && employee ? "visible" : "hidden"
             }`}
-            onClick={() => router.push("/post")}
+            onClick={() => {
+              router.push("/post");
+              setMenuOpen(false);
+            }}
           >
             Post
           </div>
-          <div className="text-primary font-semibold text-[20px] mb-2">
+          <div
+            className="text-primary font-semibold text-[20px] hover:cursor-pointer mb-2"
+            onClick={() => {
+              router.push("/job");
+              setMenuOpen(false);
+            }}
+          >
             Jobs
           </div>
 
@@ -119,7 +138,10 @@ const NavBar = () => {
             className={`text-primary font-semibold text-[20px] hover:cursor-pointer mb-2 ${
               session && session.user ? "visible" : "hidden"
             }`}
-            onClick={() => router.push("/profile")}
+            onClick={() => {
+              router.push("/profile");
+              setMenuOpen(false);
+            }}
           >
             Profile
           </div>

@@ -16,21 +16,12 @@ export const authOptions = {
           const db = await connectToDB();
           const existingUser = await User.findOne({ email: credentials.email });
 
-          if (existingUser) {
-            // User already exists, check password
-            if (existingUser.password === credentials.password) {
-              return existingUser;
-            } else {
-              return null;
-            }
-          } else {
-            // User doesn't exist, create a new user
-            const newUser = await User.create({
-              email: credentials.email,
-              password: credentials.password,
-            });
-            return newUser;
+          // User already exists, check password
+          if (existingUser.password === credentials.password) {
+            return existingUser;
           }
+
+          return null;
         } catch (error) {
           console.error(error);
           return null;

@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import { useToast } from "@/components/ui/use-toast";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +11,7 @@ import { buttonVariants } from "@/components/ui/button";
 // import Router from "next/router";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { ToastAction } from "./ui/toast";
 
 const EyeIcon = ({ show }) => (
   <svg
@@ -48,16 +51,18 @@ const EyeOffIcon = ({ show }) => (
   </svg>
 );
 
-const UserAuthForm = () => {
+const UserAuthForm = ({ content }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({
     email: "",
     password: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
 
-  async function onSubmit(event) {
+  const [showPassword, setShowPassword] = useState(false);
+  const { toast } = useToast();
+
+  async function onSubmit2(event) {
     event.preventDefault();
     setIsLoading(true);
     const res = await signIn("credentials", {
@@ -68,10 +73,48 @@ const UserAuthForm = () => {
     });
   }
 
+  const onSubmit1 = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    console.log("Creating");
+    const res = await fetch("/api/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (res.status == 200) {
+      console.log("user Created Successfully");
+      signIn();
+    } else if (res.status == 400) {
+      console.log("User Already Exists");
+      toast({
+        variant: "destructive",
+        title: "User Already Exists",
+        description: "Please Sign In",
+      });
+    } else {
+      console.log("error creating User");
+      setIsLoading(false);
+    }
+  };
+
+  function passwordCheck() {
+    console.log(content);
+    console.log(data.password);
+    const passwordRegex =
+      /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.\-_*])([a-zA-Z0-9@#$%^&+=*.\-_]){8,}$/;
+    if (!passwordRegex.test(data.password)) {
+      return true;
+    }
+    return false;
+  }
+
   return (
     <section className="z-20">
       <div className={cn("grid gap-6")}>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={content === "Sign In" ? onSubmit2 : onSubmit1}>
           <div className="grid gap-2">
             <div className="grid gap-2">
               <Input
@@ -96,9 +139,10 @@ const UserAuthForm = () => {
                   }}
                   disabled={isLoading}
                 />
+
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 px-2 py-1.5 text-sm text-gray-700 focus:outline-none"
+                  className="absolute inset-y-0 right-0 px-2 py-1.5 text-sm mb-3 text-gray-700 focus:outline-none"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -107,6 +151,15 @@ const UserAuthForm = () => {
                     <EyeIcon show={showPassword} />
                   )}
                 </button>
+                {content === "Sign Up" &&
+                  passwordCheck() &&
+                  data.password.length !== 0 && (
+                    <h1 className="text-red-600 text-xs line-clamp-2">
+                      Password must contain at least eight characters, including
+                      one uppercase letter, one lowercase letter, and one number
+                      and one special character,
+                    </h1>
+                  )}
               </div>
             </div>
             <Button
@@ -115,11 +168,32 @@ const UserAuthForm = () => {
                 buttonVariants({ variant: "outline" }),
                 " bg-blue-900 text-white"
               )}
-              onSubmit={onSubmit}
+              onSubmit={content === "Sign In" ? onSubmit2 : onSubmit1}
             >
-              Sign In with Email
+              {content} with Email
             </Button>
           </div>
+          {content === "Sign In" ? (
+            <div className="text-sm text-slate-500 mt-6 flex justify-center">
+              Dont Have an Account{" "}
+              <span
+                className="underline hover:cursor-pointer ml-2 text-black"
+                onClick={() => router.push("/signup")}
+              >
+                Sign Up
+              </span>
+            </div>
+          ) : (
+            <div className="text-sm text-slate-500 mt-6 flex justify-center">
+              Already Have an Account{" "}
+              <span
+                className="underline hover:cursor-pointer ml-2 text-black"
+                onClick={() => signIn()}
+              >
+                Sign In
+              </span>
+            </div>
+          )}
         </form>
       </div>
     </section>

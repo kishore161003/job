@@ -2,7 +2,7 @@
 
 Link- https://job-nestle-kishorekp.vercel.app/
 
-This project is a Recipe sharing Platform, built using NextAuth , NextJS and Tailwind CSS. The primary purpose of creating this project is for learning, practicing, and improving skills in NextJS.
+This project is a Job Portal Platform, built using NextAuth , NextJS and Tailwind CSS. The primary purpose of creating this project is for learning, practicing, and improving skills in NextJS.
 
 Overview
 

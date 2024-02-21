@@ -19,6 +19,7 @@ const JobForm = ({ data }) => {
   const router = useRouter();
   const [jobData, setJobData] = useState(initialData);
   const [newSkill, setNewSkill] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleChange = (e, field) => {
     setJobData((prevData) => ({ ...prevData, [field]: e.target.value }));
@@ -43,6 +44,7 @@ const JobForm = ({ data }) => {
   };
 
   const handlePost = () => {
+    setIsLoaded(true);
     const post = async () => {
       const res = await fetch("/api/post", {
         method: "POST",
@@ -58,6 +60,7 @@ const JobForm = ({ data }) => {
       }
     };
     post();
+    setIsLoaded(false);
   };
 
   return (
@@ -194,8 +197,9 @@ const JobForm = ({ data }) => {
             type="button"
             className="bg-primary text-white px-12 py-2 rounded-lg mr-2"
             onClick={handlePost}
+            disabled={isLoaded}
           >
-            Post
+            {isLoaded ? "Posting..." : "Post"}
           </button>
         </div>
       </form>

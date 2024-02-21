@@ -57,7 +57,7 @@ const HomePage = () => {
                 Lets Make it Happen .
               </blockquote>
               <a
-                href="#job-listings"
+                href="/job"
                 className="bg-primary text-white py-2 px-6 rounded-full hover:bg-blue-600 transition duration-300"
               >
                 Explore Job Openings

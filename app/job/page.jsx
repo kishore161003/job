@@ -20,7 +20,12 @@ const Page = () => {
   const fetchJobData = async (search) => {
     console.log("searchtext", search);
     if (search.length == 0) {
-      setJobs(temp);
+      fetch("/api/job")
+        .then((res) => res.json())
+        .then((data) => {
+          setJobs(data);
+          setTemp(data);
+        });
       return;
     }
 

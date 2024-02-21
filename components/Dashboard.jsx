@@ -19,6 +19,7 @@ const Dashboard = () => {
               .then((res) => res.json())
               .then((data) => {
                 setJobs(data);
+                console.log(data);
               });
           } else {
             fetch(`/api/job/fetch/candidate/${session.user.email}`)
@@ -26,6 +27,7 @@ const Dashboard = () => {
               .then((data) => {
                 console.log(data);
                 setJobs(data);
+                console.log(data);
               });
           }
         });

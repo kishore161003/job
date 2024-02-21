@@ -79,7 +79,7 @@ const Page = () => {
         <input
           type="text"
           name="search"
-          placeholder="Search for a tag or a username"
+          placeholder="Search for Job"
           onChange={handleSearchChange}
           value={searchText}
           required

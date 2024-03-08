@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useUploadThing } from "@/lib/uploadthing";
+import React, { useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 
 export const Employee = ({ data }) => {
   const [tempData, setTempData] = useState(data);
   const [companyData, setCompanyData] = useState(data);
   const [isEditMode, setIsEditMode] = useState(false);
-  const { startUpload } = useUploadThing("media");
+  const inputFileRef = useRef(null);
+
   const { data: session } = useSession();
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -36,16 +36,21 @@ export const Employee = ({ data }) => {
   const handleSaveChanges = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     var imgUrl = "/defaultuser.png";
-    if (image) {
-      imgUrl = await startUpload(Array.from(image));
-      if (imgUrl && imgUrl[0].url) {
-        setCompanyData((prevData) => ({ ...prevData, image: imgUrl }));
-      }
-      // console.log("imgUrl", imgUrl[0].url);
-      postChanges(imgUrl[0].url);
-    } else {
+
+    if (!inputFileRef.current?.files) {
       postChanges(imgUrl);
+    } else {
+      const file = inputFileRef.current.files[0];
+
+      const response = await fetch(`/api/avatar/upload?filename=${file.name}`, {
+        method: "POST",
+        body: file,
+      });
+
+      const newBlob = await response.json();
+      postChanges(newBlob.url);
     }
     setLoading(false);
     setIsEditMode(false);
@@ -74,6 +79,7 @@ export const Employee = ({ data }) => {
             type="file"
             accept="image/*"
             className="w-1/2 p-2 border rounded-md"
+            ref={inputFileRef}
             onChange={(e) => {
               setCompanyData((prevData) => ({
                 ...prevData,

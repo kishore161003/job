@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useUploadThing } from "@/lib/uploadthing";
+import { useState, useRef } from "react";
 import { Input } from "../components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
@@ -14,19 +13,19 @@ const ApplyForm = ({ job, apply, jobName }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState(apply);
   const [phone, setPhone] = useState("");
-  const { startUpload } = useUploadThing("media");
+  const inputFileRef = useRef(null);
   const [resumeURL, setResumeURL] = useState("");
 
   const saveResume = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    if (resume) {
-      const url = await startUpload(Array.from(resume));
-      if (url && url[0].url) {
-        setResumeURL(url[0].url);
-      }
-      handleSubmit(url[0].url);
-    }
+    const file = inputFileRef.current?.files[0];
+    const response = await fetch(`/api/avatar/upload?filename=${file.name}`, {
+      method: "POST",
+      body: file,
+    });
+    const newBlob = await response.json();
+    handleSubmit(newBlob.url);
     setIsLoading(false);
   };
 
@@ -103,6 +102,7 @@ const ApplyForm = ({ job, apply, jobName }) => {
               onChange={(e) => {
                 setResume(e.target.files);
               }}
+              ref={inputFileRef}
               disabled={isLoading}
               required
             />

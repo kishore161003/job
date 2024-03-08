@@ -1,9 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useSession } from "next-auth/react";
-import { useUploadThing } from "@/lib/uploadthing";
 import { Input } from "../ui/input";
-import { set } from "mongoose";
 
 const Candidate = ({ data }) => {
   const [tempData, setTempData] = useState(data);
@@ -11,7 +9,7 @@ const Candidate = ({ data }) => {
   const [skill, setSkill] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
   const { data: session } = useSession();
-  const { startUpload } = useUploadThing("media");
+  const inputFileRef = useRef(null);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -56,15 +54,19 @@ const Candidate = ({ data }) => {
     setLoading(true);
 
     var imgUrl = "/defaultuser.png";
-    if (image) {
-      imgUrl = await startUpload(Array.from(image));
-      if (imgUrl && imgUrl[0].url) {
-        setUserData((prevData) => ({ ...prevData, image: imgUrl[0].url }));
-      }
 
-      postChanges(imgUrl[0].url);
-    } else {
+    if (!inputFileRef.current?.files) {
       postChanges(imgUrl);
+    } else {
+      const file = inputFileRef.current.files[0];
+
+      const response = await fetch(`/api/avatar/upload?filename=${file.name}`, {
+        method: "POST",
+        body: file,
+      });
+
+      const newBlob = await response.json();
+      postChanges(newBlob.url);
     }
     setLoading(false);
     setIsEditMode(false);
@@ -99,6 +101,7 @@ const Candidate = ({ data }) => {
               }));
               setImage(e.target.files);
             }}
+            ref={inputFileRef}
             disabled={!isEditMode}
           />
         </div>

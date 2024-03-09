@@ -19,24 +19,19 @@ export const POST = async (req, { params }) => {
         about: about,
         webSite: website,
         catagory: catagory,
+        image: images,
       };
-
-      if (images) { 
-        newUser.image = images;
-      }
-      Object.keys(existingUser.toObject()).forEach((key) => {
-        if (key !== "_id" && newUser[key] === undefined) {
-          newUser[key] = existingUser[key];
+      const user = await User.findOneAndUpdate(
+        {
+          email: params.id,
+        },
+        newUser,
+        {
+          new: true,
         }
-      });
+      );
 
-      console.log("new user", newUser, "req", req.json());
-      await User.findByIdAndDelete(existingUser._id);
-
-      const createdUser = await User.create(newUser);
-
-      console.log(createdUser, createdUser._id);
-      return new Response(JSON.stringify(createdUser), { status: 200 });
+      return new Response(JSON.stringify(user), { status: 200 });
     } else {
       return new Response(JSON.stringify({ error: "User not found" }), {
         status: 404,

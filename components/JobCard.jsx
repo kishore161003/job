@@ -144,7 +144,7 @@ const JobCard = ({ data, profile }) => {
                 <path d="M6 12h.01M18 12h.01" />
               </svg>
               <h1 className="text-sm font-semibold text-slate-500">
-                ${data.salary}
+                ₹{data.salary}
               </h1>
             </div>
             <div className="flex gap-2">

@@ -154,7 +154,7 @@ const Page = ({ params }) => {
               <circle cx="12" cy="12" r="2" />
               <path d="M6 12h.01M18 12h.01" />
             </svg>
-            <h1 className="text-lg font-semibold text-white">${job.salary}</h1>
+            <h1 className="text-lg font-semibold text-white">₹{job.salary}</h1>
           </div>
           <div className="flex gap-20 border-2 p-2 px-4 w-fit max-sm:flex-wrap border-white rounded-md">
             <div className="flex gap-2">

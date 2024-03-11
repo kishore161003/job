@@ -37,13 +37,13 @@ export const Employee = ({ data }) => {
     e.preventDefault();
     setLoading(true);
 
-    var imgUrl = "/defaultuser.png";
+    var imgUrl = companyData.image || "/defaultuser.png";
 
-    if (!inputFileRef.current?.files) {
+    if (!inputFileRef.current?.files || !inputFileRef.current.files.length) {
       postChanges(imgUrl);
     } else {
       const file = inputFileRef.current.files[0];
-
+      console.log(inputFileRef.current.files[0]);
       const response = await fetch(`/api/avatar/upload?filename=${file.name}`, {
         method: "POST",
         body: file,

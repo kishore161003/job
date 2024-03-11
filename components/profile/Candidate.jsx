@@ -53,9 +53,9 @@ const Candidate = ({ data }) => {
     e.preventDefault();
     setLoading(true);
 
-    var imgUrl = "/defaultuser.png";
+    var imgUrl = userData.image || "/defaultuser.png";
 
-    if (!inputFileRef.current?.files) {
+    if (!inputFileRef.current?.files || !inputFileRef.current.files.length) {
       postChanges(imgUrl);
     } else {
       const file = inputFileRef.current.files[0];

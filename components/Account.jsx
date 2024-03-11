@@ -57,7 +57,7 @@ const Account = () => {
             <option value="" disabled>
               Select Category
             </option>
-            <option value="Employee">Employee</option>
+            <option value="Employee">Employer</option>
             <option value="Candidate">Candidate</option>
           </select>
         ) : (

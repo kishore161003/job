@@ -45,6 +45,12 @@ const JobForm = ({ data }) => {
 
   const handlePost = () => {
     setIsLoaded(true);
+    if (jobData.salary[0] === "$" || jobData.salary[0] === "₹") {
+      setJobData((prevData) => ({
+        ...prevData,
+        salary: prevData.salary.slice(1),
+      }));
+    }
     const post = async () => {
       const res = await fetch("/api/post", {
         method: "POST",

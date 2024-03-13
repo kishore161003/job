@@ -16,6 +16,7 @@ const Page = ({ isChanged }) => {
         setTemp(data);
       });
   }, []);
+
   useEffect(() => {
     fetch("/api/job")
       .then((res) => res.json())

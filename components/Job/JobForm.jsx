@@ -72,7 +72,6 @@ const JobForm = ({ data }) => {
     };
     await post();
     setIsChanged((prev) => !prev);
-    <Page isChanged={isChanged} />;
     setIsLoaded(false);
   };
 
@@ -93,7 +92,6 @@ const JobForm = ({ data }) => {
             }
           }}
         />
-
         <label className="block text-sm font-semibold mb-2 mt-2">
           Description:
         </label>
@@ -111,7 +109,6 @@ const JobForm = ({ data }) => {
           }}
           onChange={(e) => handleChange(e, "description")}
         />
-
         <label className="block text-sm font-semibold mb-2 mt-2">
           Location:
         </label>
@@ -133,7 +130,6 @@ const JobForm = ({ data }) => {
           </option>
           <option value="Relocate">Relocate</option>
         </select>
-
         <label className="block text-sm font-semibold mb-2 mt-2">
           Start Date:
         </label>
@@ -151,7 +147,6 @@ const JobForm = ({ data }) => {
           value={jobData.startDate}
           onChange={(e) => handleChange(e, "startDate")}
         />
-
         <label className="block text-sm font-semibold mb-2 mt-2">
           Duration:
         </label>
@@ -169,7 +164,6 @@ const JobForm = ({ data }) => {
           value={jobData.duration}
           onChange={(e) => handleChange(e, "duration")}
         />
-
         <label className="block text-sm font-semibold mb-2 mt-2">Salary:</label>
         <Input
           type="text"
@@ -185,7 +179,6 @@ const JobForm = ({ data }) => {
           required
           onChange={(e) => handleChange(e, "salary")}
         />
-
         <label className="block text-sm font-semibold mb-2 mt-2">
           Openings:
         </label>
@@ -197,7 +190,6 @@ const JobForm = ({ data }) => {
           value={jobData.openings}
           onChange={(e) => handleChange(e, "openings")}
         />
-
         <label className="block text-sm font-semibold mb-2 mt-2">Skills:</label>
         <div className="flex gap-2">
           <Input
@@ -245,8 +237,10 @@ const JobForm = ({ data }) => {
               </div>
             ))}
         </div>
-
-        {/* Post button */}
+        <div className="hidden">
+          <Page isChanged={isChanged} />
+        </div>
+        ;{/* Post button */}
         <div className="flex mt-8 mr-4 justify-center">
           <button
             type="button"

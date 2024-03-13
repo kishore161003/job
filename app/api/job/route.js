@@ -5,6 +5,7 @@ export const GET = async (req) => {
   try {
     await connectToDB();
     const jobs = await Job.find({});
+    console.log("jobs", jobs);
     return new Response(JSON.stringify(jobs), { status: 200 });
   } catch (err) {
     console.log(err);

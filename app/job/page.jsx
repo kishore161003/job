@@ -2,6 +2,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import JobCardList from "@/components/JobCardList";
+import { headers } from "@/next.config";
 
 const Page = ({ isChanged = false }) => {
   const [jobs, setJobs] = useState([]);
@@ -15,7 +16,9 @@ const Page = ({ isChanged = false }) => {
   const fetchJobData = async (search = "") => {
     console.log("searchtext", search);
     if (search.length == 0) {
-      await fetch("/api/job")
+      await fetch("/api/job", {
+        headers: { "cache-control": "no-cache" },
+      })
         .then((res) => res.json())
         .then((data) => {
           setJobs(data);

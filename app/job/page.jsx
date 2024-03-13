@@ -14,6 +14,13 @@ const Page = ({ isChanged = false }) => {
 
   const fetchJobData = async (search = "") => {
     console.log("searchtext", search);
+    await fetch("/api/job", { next: { revalidate: 5 } })
+      .then((res) => res.json())
+      .then((data) => {
+        setJobs(data);
+        setTemp(data);
+      });
+    return;
 
     try {
       const res = await fetch(`/api/job/search/${search}`);

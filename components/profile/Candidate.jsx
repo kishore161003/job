@@ -88,7 +88,7 @@ const Candidate = ({ data }) => {
             <img
               src={userData.image}
               alt="Profile"
-              className="w-[100px] h-[100px] ml-4 border rounded-full"
+              className="w-[100px] h-[100px] max-md:w-[50px] max-md:h-[50px]  md:ml-4 border rounded-full"
             />
           )}
           <Input

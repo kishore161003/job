@@ -43,15 +43,18 @@ const JobForm = ({ data }) => {
     setJobData((prevData) => ({ ...prevData, skills: newSkills }));
   };
 
-  const handlePost = () => {
+  const handlePost = async () => {
     setIsLoaded(true);
+
     if (jobData.salary[0] === "$" || jobData.salary[0] === "₹") {
       setJobData((prevData) => ({
         ...prevData,
         salary: prevData.salary.slice(1),
       }));
     }
+
     const post = async () => {
+      setIsLoaded(true);
       const res = await fetch("/api/post", {
         method: "POST",
         headers: {
@@ -65,7 +68,7 @@ const JobForm = ({ data }) => {
         router.push("/");
       }
     };
-    post();
+    await post();
     setIsLoaded(false);
   };
 
@@ -79,16 +82,29 @@ const JobForm = ({ data }) => {
           onChange={(e) => handleChange(e, "title")}
           placeholder="Enter job title"
           required
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              document.getElementById("description").focus(); // Focus on password field
+            }
+          }}
         />
 
         <label className="block text-sm font-semibold mb-2 mt-2">
           Description:
         </label>
         <textarea
+          id="description"
           required
           placeholder="Enter job description"
           className="w-full p-2 border h-32 rounded-md mb-4"
           value={jobData.description}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              document.getElementById("location").focus(); // Focus on password field
+            }
+          }}
           onChange={(e) => handleChange(e, "description")}
         />
 
@@ -96,9 +112,16 @@ const JobForm = ({ data }) => {
           Location:
         </label>
         <select
+          id="location"
           required
           value={jobData.location}
           onChange={(e) => handleChange(e, "location")}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              document.getElementById("startDate").focus(); // Focus on password field
+            }
+          }}
           className="w-full p-2 border rounded-md mb-4 "
         >
           <option value="Work from Home" className="">
@@ -111,8 +134,15 @@ const JobForm = ({ data }) => {
           Start Date:
         </label>
         <Input
+          id="startDate"
           placeholder="Enter Start date"
           type="date"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              document.getElementById("duration").focus(); // Focus on password field
+            }
+          }}
           required
           value={jobData.startDate}
           onChange={(e) => handleChange(e, "startDate")}
@@ -122,8 +152,15 @@ const JobForm = ({ data }) => {
           Duration:
         </label>
         <Input
+          id="duration"
           placeholder="Enter job duration"
           type="text"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              document.getElementById("salary").focus(); // Focus on password field
+            }
+          }}
           required
           value={jobData.duration}
           onChange={(e) => handleChange(e, "duration")}
@@ -132,8 +169,15 @@ const JobForm = ({ data }) => {
         <label className="block text-sm font-semibold mb-2 mt-2">Salary:</label>
         <Input
           type="text"
+          id="salary"
           value={jobData.salary}
           placeholder="Enter job salary"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              document.getElementById("openings").focus(); // Focus on password field
+            }
+          }}
           required
           onChange={(e) => handleChange(e, "salary")}
         />
@@ -142,6 +186,7 @@ const JobForm = ({ data }) => {
           Openings:
         </label>
         <Input
+          id="openings"
           type="number"
           required
           placeholder="Enter job openings"
@@ -202,7 +247,9 @@ const JobForm = ({ data }) => {
           <button
             type="button"
             className="bg-primary text-white px-12 py-2 rounded-lg mr-2"
-            onClick={handlePost}
+            onClick={() => {
+              handlePost();
+            }}
             disabled={isLoaded}
           >
             {isLoaded ? "Posting..." : "Post"}

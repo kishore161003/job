@@ -75,7 +75,7 @@ const Page = () => {
   console.log(jobs);
   return (
     <div className="lg:mx-32">
-      <form className="relative w-full flex-center">
+      <form className="relative w-full flex-center max-md:px-4 h">
         <input
           type="text"
           name="search"

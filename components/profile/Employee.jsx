@@ -72,7 +72,7 @@ export const Employee = ({ data }) => {
             <img
               src={companyData.image}
               alt="Company"
-              className="w-[100px] h-[100px] ml-4 border rounded-full"
+              className="w-[100px] h-[100px] max-md:w-[50px] max-md:h-[50px]  md:ml-4  border rounded-full"
             />
           )}
           <input

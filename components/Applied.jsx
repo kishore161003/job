@@ -11,7 +11,7 @@ const Applied = ({ jobName, application }) => {
   return (
     <div>
       <form className="relative">
-        <h1 className="text-xl ml-7 mt-2 mb-4 font-semibold text-cyan-900">
+        <h1 className="text-xl md:ml-7 mt-2 mb-4 font-semibold text-cyan-900">
           Applied for {jobName}
         </h1>
         <CardContent>
@@ -52,13 +52,15 @@ const Applied = ({ jobName, application }) => {
           {application.status === "processing" ? (
             <button
               type="button"
-              className="text-white px-4  bg-cyan-900 py-2 rounded-lg mr-2 ml-[88%] mt-4 w-32"
+              className="text-white px-4  bg-cyan-900 py-2 rounded-lg mr-2  ml-[88%] mt-4 w-32"
               disabled={true}
-            ></button>
+            >
+              Processing...
+            </button>
           ) : application.status === "Accepted" ? (
             <button
               type="button"
-              className="text-white px-4 bg-green-500 py-2 rounded-lg mr-2 ml-[88%] mt-4 w-32"
+              className="text-white px-4 bg-green-500 py-2 rounded-lg mr-2 md:ml-[88%] mt-4 w-32"
               disabled={true}
             >
               Accepted

@@ -3,10 +3,10 @@ import { copyrightSign } from "../assets/icons";
 const Footer = () => {
   return (
     <div className="bg-blue-900 mt-8 pt-8 pb-4  font-roboto">
-      <div className="flex justify-between lg:mx-32">
+      <div className="flex justify-between lg:mx-32  items-center">
         <div>
-          <div className="text-white flex-col ml-6">
-            <div className="flex ml-4">
+          <div className="text-white flex-col  max-md:text-sm md:ml-6">
+            <div className="flex md:ml-4">
               <svg
                 width="20"
                 height="20"
@@ -22,7 +22,7 @@ const Footer = () => {
               </svg>
               FaceBook
             </div>
-            <div className="flex ml-4 mt-2">
+            <div className="flex  md:ml-4 mt-2">
               <svg
                 width="20"
                 height="20"
@@ -40,7 +40,7 @@ const Footer = () => {
               </svg>
               Instagram
             </div>
-            <div className="flex ml-4 mt-2">
+            <div className="flex md:ml-4 mt-2">
               <svg
                 width="20"
                 height="20"
@@ -59,9 +59,9 @@ const Footer = () => {
           </div>
         </div>
         <div>
-          <div className="text-white flex flex-col gap-2 pr-6">
-            <h1 className="text-xl font-bold">Get in Touch</h1>
-            <div className="flex align-bottom">
+          <div className="text-white flex flex-col gap-2 max-md:pr-2 pr-6">
+            <h1 className="text-xl font-bold max-sm:text-md">Get in Touch</h1>
+            <div className="flex align-bottom max-sm:text-sm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -78,7 +78,7 @@ const Footer = () => {
               </svg>
               +91 6379568939
             </div>
-            <div className="flex">
+            <div className="flex  max-sm:text-sm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

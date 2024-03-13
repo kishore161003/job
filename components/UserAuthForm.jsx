@@ -111,18 +111,35 @@ const UserAuthForm = ({ content }) => {
     return false;
   }
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      content === "Sign In" ? onSubmit2(e) : onSubmit1(e);
+    }
+  };
+
   return (
     <section className="z-20">
       <div className={cn("grid gap-6")}>
-        <form onSubmit={content === "Sign In" ? onSubmit2 : onSubmit1}>
+        <form
+          onSubmit={content === "Sign In" ? onSubmit2 : onSubmit1}
+          onKeyPress={handleKeyPress}
+        >
           <div className="grid gap-2">
             <div className="grid gap-2">
               <Input
+                required
                 id="email"
                 placeholder="Enter Your Email"
                 type="email"
                 onChange={(e) => {
                   setData({ ...data, email: e.target.value });
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    document.getElementById("password").focus(); // Focus on password field
+                  }
                 }}
                 disabled={isLoading}
               />
@@ -131,6 +148,7 @@ const UserAuthForm = ({ content }) => {
                   Password
                 </Label>
                 <Input
+                  required
                   id="password"
                   placeholder="Password"
                   type={showPassword ? "text" : "password"}

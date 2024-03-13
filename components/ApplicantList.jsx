@@ -16,7 +16,7 @@ export const ApplicantList = ({ jobId, name }) => {
 
   return (
     <div>
-      <CardHeader className="flex text-xl font-semibold text-cyan-900">
+      <CardHeader className="flex text-xl w-[100%] font-semibold text-cyan-900">
         Applicants
       </CardHeader>
       {applicants.map((applicant, index) => {
@@ -39,17 +39,17 @@ export default ApplicantList;
 const ApplicantCard = ({ application, name, num }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [status, setStatus] = useState(application.status);
-  const [loadingStatus, setLoadingStatus] = useState("processing");
+  const [loadingStatus, setLoadingStatus] = useState(application.status);
 
   const isLoading = true;
 
   const handleResult = (result) => async () => {
-    setStatus(result);
     const res = await fetch(`/api/apply/result/${application._id}/${result}`);
     const data = await res.json();
     const maildata = await fetch(`/api/sendemail/${application._id}`);
     const mail = await maildata.json();
     setLoadingStatus(result);
+    setStatus(result);
 
     console.log(mail);
   };
@@ -60,8 +60,8 @@ const ApplicantCard = ({ application, name, num }) => {
 
   return (
     <div>
-      <div className="px-14 mb-12">
-        <div className="flex justify-between items-center mb-2">
+      <div className=" mb-12">
+        <div className="flex justify-between items-center px-14 mb-2">
           <h2 className="text-md text-cyan-900 font-semibold">
             Applicant {num}{" "}
           </h2>
@@ -166,9 +166,7 @@ const ApplicantCard = ({ application, name, num }) => {
                       className="bg-green-500 text-white px-4 py-2  rounded-lg mr-2"
                       disabled={true}
                     >
-                      {loadingStatus === "Accepted"
-                        ? "Accepted"
-                        : "Accepting..."}
+                      Accepted
                     </button>
                   </div>
                 ) : (
@@ -177,9 +175,7 @@ const ApplicantCard = ({ application, name, num }) => {
                       className="bg-red-500 text-white px-4 py-2 mt-2 rounded-lg"
                       disabled={true}
                     >
-                      {loadingStatus === "Rejected"
-                        ? "Rejected"
-                        : "Rejecting..."}
+                      Rejected
                     </button>
                   </div>
                 )}
@@ -188,7 +184,7 @@ const ApplicantCard = ({ application, name, num }) => {
           </div>
         )}
         <Separator
-          className="h-[0.075rem] bg-cyan-900 w-[100%] mt-4 "
+          className="h-[0.075rem]  bg-cyan-900 max-md:ml-8 max-md:w-[70%] mt-4 "
           orientation="horizontal"
         />
       </div>

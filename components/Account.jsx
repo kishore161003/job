@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Employee } from "./profile/Employee";
 import Candidate from "./profile/Candidate";
 import { useSession } from "next-auth/react";
+import ReactLoading from "react-loading";
 
 const Account = () => {
   const { data: session } = useSession();
@@ -38,7 +39,7 @@ const Account = () => {
   };
 
   return data ? (
-    <Card className="p-4 border rounded-md shadow-md w-[100%]">
+    <Card className="p-4 pr-3 border rounded-md shadow-md w-[100%]">
       <CardHeader className="text-lg font-semibold">
         Edit Your Profile
       </CardHeader>
@@ -62,7 +63,9 @@ const Account = () => {
           </select>
         ) : (
           <div className="p-2 border rounded-md bg-gray-100">
-            <strong>{catagory}</strong>
+            <strong>
+              {catagory === "Employee" ? "Employer" : "Candidate"}
+            </strong>
           </div>
         )}
         {data && catagory === "Employee" ? <Employee data={data} /> : null}
@@ -71,9 +74,8 @@ const Account = () => {
       </CardContent>
     </Card>
   ) : (
-    <div className="p-4 border rounded-md shadow-md w-[100%] flex flex-col justify-center items-center h-full">
-      <h1 className="text-2xl">Loading....</h1>
-      <p>If it take time , just Refresh the Page</p>
+    <div className="flex flex-row justify-center">
+      <ReactLoading color="black" className="h-[5%] w-[10%]" />
     </div>
   );
 };

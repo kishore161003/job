@@ -7,7 +7,9 @@ export const POST = async (req) => {
     const { email, password } = await req.json();
     const existingUser = await User.findOne({ email: email });
     if (existingUser) {
-      return new Response(JSON.stringify({ message: "Email already exists" }), { status: 400 });
+      return new Response(JSON.stringify({ message: "Email already exists" }), {
+        status: 400,
+      });
     }
     const newUser = await User.create({
       email: email,

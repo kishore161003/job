@@ -61,15 +61,15 @@ const Page = () => {
           orientation="horizontal"
           className="w-[90%] ml-4 h-0.5 md:hidden bg-blue-950 rounded-md"
         />
-        <div className="w-full max-md:w-[90%] max-md:pl-8">
+        <div className="w-full  max-md:pl-8">
           <ScrollArea className="h-[350px]">
             {account ? (
-              <div>
+              <div className="max-md:w-[90%]">
                 <Account />
               </div>
             ) : (
-              <div>
-                <Dashboard  />
+              <div className="max-md:w-[90%]">
+                <Dashboard />
               </div>
             )}
           </ScrollArea>

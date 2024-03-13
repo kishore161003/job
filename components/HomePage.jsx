@@ -32,11 +32,11 @@ const HomePage = () => {
     <section className="lg:mx-32">
       <div className="flex flex-col">
         <Card
-          className={`flex flex-col justify-center text-white h-8 mt-2 bg-red-500 items-center ${
-            session && catagoryNotSet ? "visible" : "hidden"
-          }`}
+          className={`flex flex-col justify-center text-white h-8 mt-2 bg-red-500 mx-2 items-center 
+            ${session && catagoryNotSet ? "visible" : "hidden"}
+            `}
         >
-          <CardHeader className="text-lg font-semibold ">
+          <CardHeader className="text-lg font-semibold max-md:text-sm max-sm:text-[10px]">
             {" "}
             Please Update Profile First to post or Apply for job !!!
           </CardHeader>
@@ -44,15 +44,15 @@ const HomePage = () => {
         <div className="flex items-center justify-between max-md:flex-wrap-reverse">
           <div>
             <div className="mx-auto text-center">
-              <h1 className="text-6xl font-bold mb-4 max-md:mt-8">
+              <h1 className="text-6xl font-bold mb-4 max-md:mt-8 max-md:text-4xl">
                 Welcome to <span className="text-primary">JobNestle</span>
               </h1>
-              <p className="text-xl text-gray-700 mb-6 text-semibold font-roboto">
+              <p className="text-xl max-md:text-md text-gray-700 mb-6 max-sm:text-sm text-semibold font-roboto">
                 Empowering Your Career Journey: Where{" "}
                 <span className="font-semibold">Dreams Take Flight</span> and
                 Careers Find Their <span className="text-green-500">Nest</span>.
               </p>
-              <blockquote className="text-2xl italic text-gray-600 mb-8">
+              <blockquote className="text-2xl  max-sm:px-2 max-sm:text-md max-md:text-lg italic text-gray-600 mb-8">
                 Your <span className="text-blue-500">Dream Job</span> Awaits.
                 Lets Make it Happen .
               </blockquote>
@@ -65,7 +65,11 @@ const HomePage = () => {
             </div>
           </div>
           <div className="">
-            <img src="heo.jpg" alt="heroSection" className="h-[500px]" />
+            <img
+              src="heo.jpg"
+              alt="heroSection"
+              className="h-[500px] max-md:h-[300px]"
+            />
           </div>
         </div>
         <div>

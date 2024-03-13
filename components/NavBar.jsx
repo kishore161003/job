@@ -105,7 +105,7 @@ const NavBar = () => {
         <div className="lg:hidden absolute top-0 p-2 rounded-md right-0 bg-white bg-opacity-95 mt-16 mr-4 z-50">
           {/* Add your mobile menu options here */}
           <div
-            className="text-primary font-semibold text-[20px] hover:cursor-pointer mb-2"
+            className="text-primary font-semibold md:text-[20px] hover:cursor-pointer mb-2"
             onClick={() => {
               router.push("/");
               setMenuOpen(false);
@@ -114,7 +114,7 @@ const NavBar = () => {
             Home
           </div>
           <div
-            className={`text-primary font-semibold text-[20px] hover:cursor-pointer mb-2 ${
+            className={`text-primary font-semibold md:text-[20px] hover:cursor-pointer mb-2 ${
               session && session.user && employee ? "visible" : "hidden"
             }`}
             onClick={() => {
@@ -125,7 +125,7 @@ const NavBar = () => {
             Post
           </div>
           <div
-            className="text-primary font-semibold text-[20px] hover:cursor-pointer mb-2"
+            className="text-primary font-semibold  md:text-[20px] hover:cursor-pointer mb-2"
             onClick={() => {
               router.push("/job");
               setMenuOpen(false);
@@ -135,7 +135,7 @@ const NavBar = () => {
           </div>
 
           <div
-            className={`text-primary font-semibold text-[20px] hover:cursor-pointer mb-2 ${
+            className={`text-primary font-semibold md:text-[20px] hover:cursor-pointer mb-2 ${
               session && session.user ? "visible" : "hidden"
             }`}
             onClick={() => {
@@ -146,7 +146,7 @@ const NavBar = () => {
             Profile
           </div>
           <div
-            className="text-[15px] font-bold text-white bg-primary p-3 rounded-md px-5 cursor-pointer"
+            className="md:text-[15px] font-bold text-white bg-primary p-3 rounded-md px-5 cursor-pointer"
             onClick={() => {
               session && session.user ? signOut() : signIn();
               toggleMenu(); // Close the menu after clicking

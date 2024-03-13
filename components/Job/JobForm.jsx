@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import Page from "@/app/job/page";
 
 const JobForm = ({ data }) => {
   const initialData = {
@@ -20,6 +21,7 @@ const JobForm = ({ data }) => {
   const [jobData, setJobData] = useState(initialData);
   const [newSkill, setNewSkill] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
 
   const handleChange = (e, field) => {
     setJobData((prevData) => ({ ...prevData, [field]: e.target.value }));
@@ -69,6 +71,8 @@ const JobForm = ({ data }) => {
       }
     };
     await post();
+    setIsChanged((prev) => !prev);
+    <Page isChanged={isChanged} />;
     setIsLoaded(false);
   };
 

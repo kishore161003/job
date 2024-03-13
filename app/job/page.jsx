@@ -3,7 +3,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import JobCardList from "@/components/JobCardList";
 
-const Page = () => {
+const Page = ({ isChanged }) => {
   const [jobs, setJobs] = useState([]);
   const [temp, setTemp] = useState([]);
   const [searchText, setSearchText] = React.useState("");
@@ -16,6 +16,14 @@ const Page = () => {
         setTemp(data);
       });
   }, []);
+  useEffect(() => {
+    fetch("/api/job")
+      .then((res) => res.json())
+      .then((data) => {
+        setJobs(data);
+        setTemp(data);
+      });
+  }, [isChanged]);
 
   const fetchJobData = async (search) => {
     console.log("searchtext", search);
